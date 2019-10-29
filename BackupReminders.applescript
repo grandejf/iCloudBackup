@@ -52,57 +52,56 @@ script theScript
 			
 		end if
 	end tell
-	
-	
-	on write_to_file(this_data, target_file, append_data)
-		try
-			set the target_file to the target_file as string
-			set the open_target_file to open for access file target_file with write permission
-			if append_data is false then set eof of the open_target_file to 0
-			write this_data to the open_target_file starting at eof
-			close access the open_target_file
-			return true
-		on error
-			try
-				close access file target_file
-			end try
-			return false
-		end try
-	end write_to_file
-	
-	on fileExists(posixPath)
-		return ((do shell script "if test -e " & quoted form of posixPath & "; then\necho 1;\nelse\necho 0;\nfi") as integer) as boolean
-	end fileExists
-	
-	on is_running(appName)
-		tell application "System Events" to (name of processes) contains appName
-	end is_running
-	
-	on dateStamp(mydate)
-		set y to text -4 thru -1 of ("0000" & (year of mydate))
-		set m to text -2 thru -1 of ("00" & ((month of mydate) as integer))
-		set d to text -2 thru -1 of ("00" & (day of mydate))
-		set hour to text -2 thru -1 of ("00" & (hours of mydate))
-		set sec to text -2 thru -1 of ("00" & (minutes of mydate))
-		return y & "-" & m & "-" & d & " " & hour & ":" & sec
-	end dateStamp
-	
-	on htmlize(this_text)
-		return this_text
-		set this_text to replace_chars(this_text, "&", "&amp;")
-		set this_text to replace_chars(this_text, ">", "&gt;")
-		set this_text to replace_chars(this_text, "<", "&lt;")
-		return this_text
-	end htmlize
-	
-	on replace_chars(this_text, search_string, replacement_string)
-		set AppleScript's text item delimiters to the search_string
-		set the item_list to every text item of this_text
-		set AppleScript's text item delimiters to the replacement_string
-		set this_text to the item_list as string
-		set AppleScript's text item delimiters to ""
-		return this_text
-	end replace_chars
 end script
+
+on write_to_file(this_data, target_file, append_data)
+	try
+		set the target_file to the target_file as string
+		set the open_target_file to open for access file target_file with write permission
+		if append_data is false then set eof of the open_target_file to 0
+		write this_data to the open_target_file starting at eof
+		close access the open_target_file
+		return true
+	on error
+		try
+			close access file target_file
+		end try
+		return false
+	end try
+end write_to_file
+
+on fileExists(posixPath)
+	return ((do shell script "if test -e " & quoted form of posixPath & "; then\necho 1;\nelse\necho 0;\nfi") as integer) as boolean
+end fileExists
+
+on is_running(appName)
+	tell application "System Events" to (name of processes) contains appName
+end is_running
+
+on dateStamp(mydate)
+	set y to text -4 thru -1 of ("0000" & (year of mydate))
+	set m to text -2 thru -1 of ("00" & ((month of mydate) as integer))
+	set d to text -2 thru -1 of ("00" & (day of mydate))
+	set hour to text -2 thru -1 of ("00" & (hours of mydate))
+	set sec to text -2 thru -1 of ("00" & (minutes of mydate))
+	return y & "-" & m & "-" & d & " " & hour & ":" & sec
+end dateStamp
+
+on htmlize(this_text)
+	set this_text to replace_chars(this_text, "&", "&amp;")
+	set this_text to replace_chars(this_text, ">", "&gt;")
+	set this_text to replace_chars(this_text, "<", "&lt;")
+	return this_text
+end htmlize
+
+on replace_chars(this_text, search_string, replacement_string)
+	set AppleScript's text item delimiters to the search_string
+	set the item_list to every text item of this_text
+	set AppleScript's text item delimiters to the replacement_string
+	set this_text to the item_list as string
+	set AppleScript's text item delimiters to ""
+	return this_text
+end replace_chars
+
 
 run script theScript
